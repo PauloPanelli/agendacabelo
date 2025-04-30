@@ -9,11 +9,14 @@ agendamentos = {}
 # Gera os horários disponíveis de segunda a sábado, das 09h às 18h (a cada 1 hora)
 def gerar_horarios():
     dias = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sabado']
+    hoje = datetime.now()
     horarios = {}
-    for dia in dias:
-        horarios[dia] = []
+    for i, dia in enumerate(dias):
+        data = (hoje + timedelta(days=i - hoje.weekday())).strftime('%d/%m')  # Calcula a data do dia
+        dia_com_data = f"{dia.capitalize()} ({data})"  # Apenas a primeira letra em maiúsculo
+        horarios[dia_com_data] = []
         for hora in range(9, 18):  # 09h às 18h
-            horarios[dia].append(f"{hora:02d}:00")
+            horarios[dia_com_data].append(f"{hora:02d}:00")
     return horarios
 
 @app.route('/')
