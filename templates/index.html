@@ -73,11 +73,7 @@
                     <div class="mb-3">
                         <label for="hora" class="form-label">Horário</label>
                         <select class="form-select" id="hora" name="hora" required>
-                            {% for hora in horarios['segunda'] %} <!-- Exibe horários disponíveis -->
-                                {% if hora not in agendamentos.get('segunda', {}) %}
-                                    <option value="{{ hora }}">{{ hora }}</option>
-                                {% endif %}
-                            {% endfor %}
+                            <!-- Os horários serão preenchidos dinamicamente via JavaScript -->
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">
@@ -126,14 +122,16 @@
             const selectHora = document.getElementById('hora');
             selectHora.innerHTML = ''; // Limpa os horários anteriores
 
-            horarios[diaSelecionado].forEach(hora => {
-                if (!agendamentos[diaSelecionado] || !(hora in agendamentos[diaSelecionado])) {
-                    const option = document.createElement('option');
-                    option.value = hora;
-                    option.textContent = hora;
-                    selectHora.appendChild(option);
-                }
-            });
+            if (horarios[diaSelecionado]) {
+                horarios[diaSelecionado].forEach(hora => {
+                    if (!agendamentos[diaSelecionado] || !(hora in agendamentos[diaSelecionado])) {
+                        const option = document.createElement('option');
+                        option.value = hora;
+                        option.textContent = hora;
+                        selectHora.appendChild(option);
+                    }
+                });
+            }
         });
     </script>
 </body>

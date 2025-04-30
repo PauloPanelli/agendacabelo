@@ -13,10 +13,15 @@ def gerar_horarios():
     horarios = {}
     for i, dia in enumerate(dias):
         data = (hoje + timedelta(days=i - hoje.weekday())).strftime('%d/%m')  # Calcula a data do dia
-        dia_com_data = f"{dia.capitalize()} ({data})"  # Apenas a primeira letra em maiúsculo
+        dia_com_data = f"{dia.capitalize()} ({data})"  # Adiciona a data ao lado do dia
         horarios[dia_com_data] = []
-        for hora in range(9, 18):  # 09h às 18h
-            horarios[dia_com_data].append(f"{hora:02d}:00")
+        hora_atual = 9 * 60  # Início do horário: 09:00 em minutos
+        fim_horario = 18 * 60  # Fim do horário: 18:00 em minutos
+        while hora_atual < fim_horario:
+            horas = hora_atual // 60
+            minutos = hora_atual % 60
+            horarios[dia_com_data].append(f"{horas:02d}:{minutos:02d}")
+            hora_atual += 40  # Incrementa 40 minutos
     return horarios
 
 @app.route('/')
