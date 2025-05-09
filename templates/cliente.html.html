@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Corte</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Agendar Corte de Cabelo</h1>
+        <form method="post" action="{{ url_for('agendar') }}">
+            <div class="mb-3">
+                <label for="tipo_corte" class="form-label">Escolha o tipo de corte</label>
+                <select class="form-select" id="tipo_corte" name="tipo_corte" required>
+                    <option value="Corte Simples">Corte Simples</option>
+                    <option value="Corte Estilizado">Corte Estilizado</option>
+                    <option value="Barba">Barba</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="dia" class="form-label">Escolha o dia</label>
+                <select class="form-select" id="dia" name="dia" required>
+                    {% for dia in horarios.keys() %}
+                        <option value="{{ dia }}">{{ dia }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="hora" class="form-label">Escolha o horário</label>
+                <select class="form-select" id="hora" name="hora" required>
+                    <!-- Os horários serão preenchidos dinamicamente via JavaScript -->
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Agendar</button>
+        </form>
+    </div>
+    <script>
+        const horarios = {{ horarios|tojson }};
+        const selectDia = document.getElementById('dia');
+        const selectHora = document.getElementById('hora');
+
+        selectDia.addEventListener('change', function () {
+            const diaSelecionado = this.value;
+            selectHora.innerHTML = ''; // Limpa os horários anteriores
+
+            if (horarios[diaSelecionado]) {
+                horarios[diaSelecionado].forEach(hora => {
+                    const option = document.createElement('option');
+                    option.value = hora;
+                    option.textContent = hora;
+                    selectHora.appendChild(option);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
