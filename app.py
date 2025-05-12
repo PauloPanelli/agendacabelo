@@ -9,8 +9,7 @@ agendamentos = {}
 
 # Usuários (simulação de banco de dados)
 usuarios = {
-    'admin': {'senha': 'admin123'},  # Administrador
-    'clientes': []  # Lista de números de telefone dos clientes
+    'admin': {'senha': 'admin123'}  # Administrador
 }
 
 # Gera os horários disponíveis de segunda a sábado, das 09h às 18h (a cada 1 hora)
@@ -33,30 +32,20 @@ def gerar_horarios():
 
 @app.route('/')
 def index():
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
-    horarios = gerar_horarios()
-    if session['usuario'] == 'admin':
+    if 'usuario' in session and session['usuario'] == 'admin':
         return render_template('admin.html', agendamentos=agendamentos)
+    horarios = gerar_horarios()
     return render_template('cliente.html', horarios=horarios)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         usuario = request.form['usuario']
-        senha = request.form.get('senha')  # Apenas para admin
-        telefone = request.form.get('telefone')  # Apenas para clientes
+        senha = request.form.get('senha')
 
         # Login do administrador
         if usuario == 'admin' and senha == usuarios['admin']['senha']:
             session['usuario'] = 'admin'
-            return redirect(url_for('index'))
-
-        # Login do cliente
-        if telefone and telefone.isdigit():
-            session['usuario'] = telefone
-            if telefone not in usuarios['clientes']:
-                usuarios['clientes'].append(telefone)
             return redirect(url_for('index'))
 
         return "Credenciais inválidas!", 400
@@ -73,13 +62,21 @@ def sucesso():
 
 @app.route('/agendar', methods=['POST'])
 def agendar():
-    if 'usuario' not in session or session['usuario'] == 'admin':
-        return redirect(url_for('login'))
-
     dia = request.form['dia']
     hora = request.form['hora']
-    cliente = session['usuario']
+    nome = request.form['nome']
+    telefone = request.form['telefone']
     tipo_corte = request.form['tipo_corte']
+
+    # Remove espaços do telefone
+    telefone = telefone.replace(" ", "")
+
+    # Define os valores dos cortes
+    valores_cortes = {
+        "Corte Simples": 35.00,
+        "Barba": 15.00,
+        "Cabelo + Barba": 45.00
+    }
 
     if dia not in agendamentos:
         agendamentos[dia] = {}
@@ -88,8 +85,10 @@ def agendar():
         return "Horário já agendado!", 400
 
     agendamentos[dia][hora] = {
-        'cliente': cliente,
-        'tipo_corte': tipo_corte
+        'cliente': nome,
+        'telefone': telefone,
+        'tipo_corte': tipo_corte,
+        'valor': valores_cortes[tipo_corte]  # Adiciona o valor do corte
     }
 
     # Após agendar, redireciona para a página de sucesso

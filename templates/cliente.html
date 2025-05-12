@@ -11,11 +11,19 @@
         <h1 class="text-center mb-4">Agendar Corte de Cabelo</h1>
         <form method="post" action="{{ url_for('agendar') }}">
             <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome" required>
+            </div>
+            <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
+            </div>
+            <div class="mb-3">
                 <label for="tipo_corte" class="form-label">Escolha o tipo de corte</label>
                 <select class="form-select" id="tipo_corte" name="tipo_corte" required>
-                    <option value="Corte Simples">Corte Simples</option>
-                    <option value="Corte Estilizado">Corte Estilizado</option>
-                    <option value="Barba">Barba</option>
+                    <option value="Corte Simples">Corte Simples - R$35,00</option>
+                    <option value="Barba">Barba - R$15,00</option>
+                    <option value="Cabelo + Barba">Cabelo + Barba - R$45,00</option>
                 </select>
             </div>
             <div class="mb-3">

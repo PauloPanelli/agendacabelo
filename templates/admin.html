@@ -26,7 +26,9 @@
                                         <div>
                                             <strong>Horário:</strong> {{ hora }}<br>
                                             <strong>Cliente:</strong> {{ detalhes['cliente'] }}<br>
-                                            <strong>Tipo de Corte:</strong> {{ detalhes['tipo_corte'] }}
+                                            <strong>Telefone:</strong> {{ detalhes['telefone'] }}<br>
+                                            <strong>Tipo de Corte:</strong> {{ detalhes['tipo_corte'] }}<br>
+                                            <strong>Valor:</strong> R$ {{ "%.2f"|format(detalhes['valor']) }}
                                         </div>
                                         <form method="post" action="{{ url_for('cancelar') }}">
                                             <input type="hidden" name="dia" value="{{ dia }}">
