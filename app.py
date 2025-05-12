@@ -82,7 +82,8 @@ def agendar():
         agendamentos[dia] = {}
 
     if hora in agendamentos[dia]:
-        return "Horário já agendado!", 400
+        flash("Horário já agendado! Por favor, escolha outro horário.")
+        return redirect(url_for('index'))
 
     agendamentos[dia][hora] = {
         'cliente': nome,
@@ -91,7 +92,7 @@ def agendar():
         'valor': valores_cortes[tipo_corte]  # Adiciona o valor do corte
     }
 
-    # Após agendar, redireciona para a página de sucesso
+    # Redireciona para a página de sucesso
     return redirect(url_for('sucesso'))
 
 @app.route('/cancelar', methods=['POST'])
