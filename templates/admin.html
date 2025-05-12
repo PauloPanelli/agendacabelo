@@ -14,35 +14,35 @@
         </div>
         {% if agendamentos %}
             {% for dia, horarios in agendamentos.items() %}
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">{{ dia }}</h5>
-                    </div>
-                    <div class="card-body">
-                        {% if horarios %}
-                            <ul class="list-group">
-                                {% for hora, detalhes in horarios.items() %}
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Horário:</strong> {{ hora }}<br>
-                                            <strong>Cliente:</strong> {{ detalhes['cliente'] }}<br>
-                                            <strong>Telefone:</strong> {{ detalhes['telefone'] }}<br>
-                                            <strong>Tipo de Corte:</strong> {{ detalhes['tipo_corte'] }}<br>
-                                            <strong>Valor:</strong> R$ {{ "%.2f"|format(detalhes['valor']) }}
-                                        </div>
-                                        <form method="post" action="{{ url_for('cancelar') }}">
-                                            <input type="hidden" name="dia" value="{{ dia }}">
-                                            <input type="hidden" name="hora" value="{{ hora }}">
-                                            <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
-                                        </form>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p class="text-muted">Nenhum agendamento para este dia.</p>
-                        {% endif %}
+                {% if horarios %} <!-- Verifica se há agendamentos no dia -->
+                <div class="mb-4">
+                    <h5 class="text-primary">{{ dia }}</h5>
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        {% for hora, detalhes in horarios.items() %}
+                        <div class="col">
+                            <div class="card h-100 border-primary">
+                                <div class="card-body">
+                                    <h6 class="card-title text-primary"><strong>Horário:</strong> {{ hora }}</h6>
+                                    <p class="card-text">
+                                        <strong>Cliente:</strong> {{ detalhes['cliente'] }}<br>
+                                        <strong>Telefone:</strong> {{ detalhes['telefone'] }}<br>
+                                        <strong>Tipo de Corte:</strong> {{ detalhes['tipo_corte'] }}<br>
+                                        <strong>Valor:</strong> R$ {{ "%.2f"|format(detalhes['valor']) }}
+                                    </p>
+                                </div>
+                                <div class="card-footer text-end">
+                                    <form method="post" action="{{ url_for('cancelar') }}">
+                                        <input type="hidden" name="dia" value="{{ dia }}">
+                                        <input type="hidden" name="hora" value="{{ hora }}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
+                {% endif %}
             {% endfor %}
         {% else %}
             <p class="text-center text-muted">Nenhum agendamento registrado.</p>
