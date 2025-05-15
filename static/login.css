@@ -1,0 +1,98 @@
+/* From Uiverse.io by bociKond - Estilo exclusivo para o formulário de login */
+.form {
+  --bg-light: #efefef;
+  --bg-dark: #707070;
+  --clr: #58bc82;
+  --clr-alpha: #9c9c9c60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto;
+  background: var(--bg-light);
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px #0001;
+}
+
+.form .input-span {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"] {
+  border-radius: 0.5rem;
+  padding: 1rem 0.75rem;
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--clr-alpha);
+  outline: 2px solid var(--bg-dark);
+}
+
+.form input[type="email"]:focus,
+.form input[type="password"]:focus {
+  outline: 2px solid var(--clr);
+}
+
+.label {
+  align-self: flex-start;
+  color: var(--clr);
+  font-weight: 600;
+}
+
+.form .submit {
+  padding: 1rem 0.75rem;
+  width: 60%; /* reduzido para centralizar melhor */
+  margin: 1rem auto 0 auto; /* centraliza horizontalmente */
+  display: flex;
+  justify-content: center; /* centraliza o texto */
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 3rem;
+  background-color: var(--bg-dark);
+  color: var(--bg-light);
+  border: none;
+  cursor: pointer;
+  transition: all 300ms;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.form .submit:hover {
+  background-color: var(--clr);
+  color: var(--bg-dark);
+}
+
+.span {
+  text-decoration: none;
+  color: var(--bg-dark);
+  margin-top: 1.5rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.span a {
+  color: var(--clr);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: #e6f9f0;
+  transition: background 0.3s, color 0.3s;
+  box-shadow: 0 2px 8px #0001;
+}
+
+.span a:hover {
+  background: var(--clr);
+  color: var(--bg-light);
+}

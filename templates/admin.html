@@ -4,49 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Gerenciar Agendamentos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div class="container py-5">
-        <h1 class="text-center mb-4">Gerenciar Agendamentos</h1>
-        <div class="text-end mb-3">
-            <a href="{{ url_for('logout') }}" class="btn btn-danger">Sair</a>
-        </div>
-        {% if agendamentos %}
-            {% for dia, horarios in agendamentos.items() %}
-                {% if horarios %} <!-- Verifica se há agendamentos no dia -->
-                <div class="mb-4">
-                    <h5 class="text-primary">{{ dia }}</h5>
-                    <div class="row row-cols-1 row-cols-md-3 g-3">
-                        {% for hora, detalhes in horarios.items() %}
-                        <div class="col">
-                            <div class="card h-100 border-primary">
-                                <div class="card-body">
-                                    <h6 class="card-title text-primary"><strong>Horário:</strong> {{ hora }}</h6>
-                                    <p class="card-text">
-                                        <strong>Cliente:</strong> {{ detalhes['cliente'] }}<br>
-                                        <strong>Telefone:</strong> {{ detalhes['telefone'] }}<br>
-                                        <strong>Tipo de Corte:</strong> {{ detalhes['tipo_corte'] }}<br>
-                                        <strong>Valor:</strong> R$ {{ "%.2f"|format(detalhes['valor']) }}
-                                    </p>
-                                </div>
-                                <div class="card-footer text-end">
-                                    <form method="post" action="{{ url_for('cancelar') }}">
+    <div style="width:100vw; min-height:100vh; display:flex; align-items:center; justify-content:center;">
+        <div class="form" style="width:100%; max-width:700px;">
+            <div class="title">Gerenciar Agendamentos</div>
+            <div class="message">Bem-vindo, admin! Veja e gerencie os agendamentos abaixo.</div>
+            <div style="text-align:right; margin-bottom:10px;">
+                <a href="{{ url_for('logout') }}" class="submit" style="background:#dc3545;">Sair</a>
+            </div>
+            {% if agendamentos %}
+                {% for dia, horarios in agendamentos.items() %}
+                    {% if horarios %}
+                        <div style="margin-bottom: 1.5rem;">
+                            <div class="message" style="color:#00bfff; font-weight:bold; text-align:left;">{{ dia }}</div>
+                            {% for hora, detalhes in horarios.items() %}
+                                <div style="background:#222; border-radius:10px; padding:10px; margin-bottom:10px;">
+                                    <strong>Horário:</strong> {{ hora }}<br>
+                                    <strong>Cliente:</strong> {{ detalhes['cliente'] }}<br>
+                                    <strong>Telefone:</strong> {{ detalhes['telefone'] }}<br>
+                                    <strong>Tipo de Corte:</strong> {{ detalhes['tipo_corte'] }}<br>
+                                    <strong>Valor:</strong> R$ {{ "%.2f"|format(detalhes['valor']) }}<br>
+                                    <form method="post" action="{{ url_for('cancelar') }}" style="margin-top:5px;">
                                         <input type="hidden" name="dia" value="{{ dia }}">
                                         <input type="hidden" name="hora" value="{{ hora }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+                                        <button type="submit" class="submit" style="background:#dc3545;">Cancelar</button>
                                     </form>
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-muted">Nenhum agendamento registrado.</p>
-        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="message">Nenhum agendamento registrado.</div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

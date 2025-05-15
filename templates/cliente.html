@@ -5,62 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Corte</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container py-5">
-        <h1 class="text-center mb-4">Agendar Corte de Cabelo</h1>
+        <form method="post" action="{{ url_for('agendar') }}" class="form">
+            <div class="title">Agendar Corte</div>
+            <div class="message">Preencha os dados para agendar seu horário.</div>
 
-        <!-- Exibe mensagens de sucesso ou erro -->
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert alert-success" role="alert">
-                {{ messages[0] }}
-            </div>
-            <!-- Botão para voltar ao formulário -->
-            <div class="text-center mt-4">
-                <a href="{{ url_for('index') }}" class="btn btn-primary">Voltar para o Formulário</a>
-            </div>
-        {% endif %}
-        {% endwith %}
+            <!-- Exibe mensagens de sucesso ou erro -->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="message" style="color:#00bfff; font-weight:bold;">{{ messages[0] }}</div>
+            {% endif %}
+            {% endwith %}
 
-        <form method="post" action="{{ url_for('agendar') }}">
-            <div class="mb-3">
-                <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome" required>
-            </div>
-            <div class="mb-3">
-                <label for="telefone" class="form-label">Telefone</label>
-                <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
-            </div>
-            <div class="mb-3">
-                <label for="tipo_corte" class="form-label">Escolha o tipo de corte</label>
-                <select class="form-select" id="tipo_corte" name="tipo_corte" required>
+            <label>
+                <input class="input" type="text" name="nome" placeholder=" " required>
+                <span>Nome</span>
+            </label>
+            <label>
+                <input class="input" type="text" name="telefone" placeholder=" " required>
+                <span>Telefone</span>
+            </label>
+            <label>
+                <select class="input" name="tipo_corte" required>
+                    <option value="" disabled selected hidden></option>
                     <option value="Corte Simples">Corte Simples - R$35,00</option>
                     <option value="Barba">Barba - R$15,00</option>
                     <option value="Cabelo + Barba">Cabelo + Barba - R$45,00</option>
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="dia" class="form-label">Escolha o dia</label>
-                <select class="form-select" id="dia" name="dia" required>
+                <span>Tipo de Corte</span>
+            </label>
+            <label>
+                <select class="input" name="dia" id="dia" required>
+                    <option value="" disabled selected hidden></option>
                     {% for dia in horarios.keys() %}
                         <option value="{{ dia }}">{{ dia }}</option>
                     {% endfor %}
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="hora" class="form-label">Escolha o horário</label>
-                <select class="form-select" id="hora" name="hora" required>
+                <span>Dia</span>
+            </label>
+            <label>
+                <select class="input" name="hora" id="hora" required>
+                    <option value="" disabled selected hidden></option>
                     <!-- Os horários serão preenchidos dinamicamente via JavaScript -->
                 </select>
+                <span>Horário</span>
+            </label>
+            <button type="submit" class="submit">Agendar</button>
+            <div class="signin">
+                <a href="{{ url_for('login') }}">Login do Administrador</a>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Agendar</button>
         </form>
-
-        <!-- Botão para login do administrador -->
-        <div class="text-center mt-4">
-            <a href="{{ url_for('login') }}" class="btn btn-secondary">Login do Administrador</a>
-        </div>
     </div>
     <script>
         const horarios = {{ horarios|tojson }};
@@ -69,7 +66,7 @@
 
         selectDia.addEventListener('change', function () {
             const diaSelecionado = this.value;
-            selectHora.innerHTML = ''; // Limpa os horários anteriores
+            selectHora.innerHTML = '<option value="" disabled selected hidden></option>';
 
             if (horarios[diaSelecionado]) {
                 horarios[diaSelecionado].forEach(hora => {
