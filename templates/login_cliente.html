@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login do Cliente</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <form method="post" action="{{ url_for('login_cliente') }}" class="form" autocomplete="off">
+        <div class="title">Login do Cliente</div>
+        <div class="message">Digite seu nome e senha.<br>Se for seu primeiro acesso, preencha também o telefone.</div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="message" style="color:#00bfff; font-weight:bold;">{{ messages[0] }}</div>
+        {% endif %}
+        {% endwith %}
+        <label>
+            <input class="input" type="text" name="nome" id="nome" placeholder=" " required pattern="^[A-Za-zÀ-ÿ\s]+$" title="Digite apenas letras">
+            <span>Nome</span>
+        </label>
+        <label id="telefone-label" style="display:none;">
+            <input class="input" type="text" name="telefone" id="telefone" placeholder=" " pattern="^\d{10,11}$" minlength="10" maxlength="11"
+                   inputmode="numeric" title="Digite um telefone válido com DDD (10 ou 11 dígitos)">
+            <span>Telefone (somente no primeiro acesso)</span>
+        </label>
+        <label>
+            <input class="input" type="password" name="senha" placeholder=" " required>
+            <span>Senha</span>
+        </label>
+        <button type="submit" class="submit">Entrar</button>
+    </form>
+    <script>
+        // Simulação: nomes já cadastrados (para exibir/ocultar telefone)
+        const nomesCadastrados = {{ clientes|tojson|safe if clientes is defined else '[]' }};
+        const nomeInput = document.getElementById('nome');
+        const telefoneLabel = document.getElementById('telefone-label');
+
+        nomeInput.addEventListener('blur', function() {
+            if (nomesCadastrados && nomesCadastrados[this.value]) {
+                telefoneLabel.style.display = 'none';
+            } else {
+                telefoneLabel.style.display = 'block';
+            }
+        });
+        // Bloqueia letras no telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>
